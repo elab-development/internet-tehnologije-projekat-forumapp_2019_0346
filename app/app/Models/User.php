@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'interests',       // Interesovanja korisnika
+        'profile_photo',   // Putanja do profilne slike
+        'bio',             // Kratka biografija korisnika
+        'posts_count',     // Broj postova koje je korisnik kreirao
+        'birthdate',       // Datum rođenja korisnika
     ];
 
     /**
@@ -40,5 +46,29 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'interests' => 'array',    // Kastovanje interesovanja u niz (ako se koristi JSON format)
+        'birthdate' => 'date',     // Kastovanje datuma rođenja u date format
     ];
+
+ 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+ 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+ 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+ 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
