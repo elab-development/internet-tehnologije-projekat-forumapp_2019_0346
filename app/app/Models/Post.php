@@ -13,6 +13,8 @@ class Post extends Model
         'content',
         'user_id',
         'topic_id',
+        'images',
+        'other'
     ];
  
     public function comments()

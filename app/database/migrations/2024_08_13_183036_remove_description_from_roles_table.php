@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-            $table->text('content'); // Sadržaj komentara 
-            $table->timestamps();
+        Schema::table('roles', function (Blueprint $table) {
+            $table->dropColumn('description'); // Brisanje description kolone
         });
     }
 
@@ -27,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::table('roles', function (Blueprint $table) {
+            $table->string('description')->nullable(); // Ponovno dodavanje description kolone
+        });
     }
 };

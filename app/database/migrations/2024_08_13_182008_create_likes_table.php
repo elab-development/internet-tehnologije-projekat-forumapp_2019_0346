@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Korisnik koji je lajkovao post
+            $table->foreignId('post_id')->constrained()->onDelete('cascade'); // Post koji je lajkovan
             $table->timestamps();
         });
     }

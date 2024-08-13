@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->text('content'); // Sadržaj posta
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Korisnik koji je kreirao post
+            $table->foreignId('topic_id')->constrained()->onDelete('cascade'); // Tema kojoj post pripada
             $table->timestamps();
         });
     }

@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
+            $table->string('title'); // Naslov teme
+            $table->text('description'); // Opis teme
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Korisnik koji je kreirao temu
             $table->timestamps();
         });
     }
