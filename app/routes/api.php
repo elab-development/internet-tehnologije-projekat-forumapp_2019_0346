@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
+
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,6 +20,7 @@ use App\Http\Controllers\LikeController;
 
 
 
+Route::apiResource('comments', CommentController::class);
 Route::apiResource('likes', LikeController::class);
 
 
