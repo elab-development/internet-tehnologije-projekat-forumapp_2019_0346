@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -18,11 +20,17 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('password'), // Default password
             'remember_token' => Str::random(10),
+            'role_id' => Role::inRandomOrder()->first()->id, // Nasumična uloga
+            'interests' => $this->faker->words(3, true), // Nasumična interesovanja
+            'profile_photo' => $this->faker->imageUrl(), // Nasumična URL slike
+            'bio' => $this->faker->paragraph, // Nasumična biografija
+            'posts_count' => $this->faker->numberBetween(0, 100), // Nasumičan broj postova
+            'birthdate' => $this->faker->date(), // Nasumičan datum rođenja
         ];
     }
 
