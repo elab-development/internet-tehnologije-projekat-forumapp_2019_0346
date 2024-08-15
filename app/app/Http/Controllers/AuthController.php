@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -22,13 +23,19 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'role_id' => 'required|integer',
             'interests' => 'nullable|array',       // Niz interesovanja
-            'profile_photo' => 'nullable|string',  // Putanja do profilne slike
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validacija slike
             'bio' => 'nullable|string|max:500',    // Kratka biografija
             'birthdate' => 'nullable|date',        // Datum rođenja
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
+        }
+
+        // Sačuvajte profilnu sliku ako postoji
+        $profilePhotoPath = null;
+        if ($request->hasFile('profile_photo')) {
+            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
         }
 
         // Kreiranje novog korisnika
@@ -38,7 +45,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
             'interests' => $request->interests,
-            'profile_photo' => $request->profile_photo,
+            'profile_photo' => $profilePhotoPath,  // Sačuvamo putanju do profilne slike
             'bio' => $request->bio,
             'birthdate' => $request->birthdate,
         ]);
