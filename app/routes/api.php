@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
-
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +18,12 @@ use App\Http\Controllers\CommentController;
 |
 */
 
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/user-info', [AuthController::class, 'userInfo'])->middleware('auth:sanctum');
 
 
 Route::apiResource('comments', CommentController::class);
