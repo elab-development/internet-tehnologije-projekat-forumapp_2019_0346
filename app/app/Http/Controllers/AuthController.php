@@ -14,50 +14,49 @@ class AuthController extends Controller
     /**
      * Register a new user.
      */
-    public function register(Request $request)
-    {
-        // Validacija ulaznih podataka
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|integer',
-            'interests' => 'nullable|array',       // Niz interesovanja
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validacija slike
-            'bio' => 'nullable|string|max:500',    // Kratka biografija
-            'birthdate' => 'nullable|date',        // Datum rođenja
-        ]);
+public function register(Request $request)
+{
+    // Validacija ulaznih podataka
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'role_id' => 'required|integer',
+        'interests' => 'nullable|array',
+        'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'bio' => 'nullable|string|max:500',
+        'birthdate' => 'nullable|date',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        // Sačuvajte profilnu sliku ako postoji
-        $profilePhotoPath = null;
-        if ($request->hasFile('profile_photo')) {
-            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
-        }
-
-        // Kreiranje novog korisnika
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
-            'interests' => $request->interests,
-            'profile_photo' => $profilePhotoPath,  // Sačuvamo putanju do profilne slike
-            'bio' => $request->bio,
-            'birthdate' => $request->birthdate,
-        ]);
-
-        // Kreiranje tokena za novog korisnika
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ], 201);
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
+
+    // Sačuvajte profilnu sliku ako postoji
+    $profilePhotoPath = null;
+    if ($request->hasFile('profile_photo')) {
+        $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
+    }
+
+    // Kreiranje novog korisnika
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role_id' => $request->role_id,
+        'interests' => $request->interests,
+        'profile_photo' => $profilePhotoPath,
+        'bio' => $request->bio,
+        'birthdate' => $request->birthdate,
+    ]);
+
+    
+
+    return response()->json([
+        'message' => 'Registration successful. Please verify your email address.',
+    ], 201);
+}
+
 
     /**
      * Log in an existing user.

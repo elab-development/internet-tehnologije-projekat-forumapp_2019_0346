@@ -7,6 +7,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,4 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Ruta za ažuriranje korisnika
     Route::put('/user/update', [AuthController::class, 'update']);
+
+    Route::get('/users', [UserController::class, 'index']);
+    Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
+    Route::get('/users/statistics', [UserController::class, 'userStatistics']);
+    Route::get('/users/search', [UserController::class, 'search']);
 });
+
+
+
