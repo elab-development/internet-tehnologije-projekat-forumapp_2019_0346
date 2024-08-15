@@ -109,4 +109,53 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+
+
+    public function update(Request $request)
+    {
+        $user = $request->user();
+
+        // Validacija ulaznih podataka, zabranjujući promenu email-a
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+            'interests' => 'nullable|array',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validacija slike
+            'bio' => 'nullable|string|max:500',
+            'birthdate' => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Sačuvajte novu profilnu sliku ako je postavljena
+        if ($request->hasFile('profile_photo')) {
+            // Brisanje stare slike ako postoji
+            if ($user->profile_photo) {
+                Storage::disk('public')->delete($user->profile_photo);
+            }
+            // Sačuvajte novu sliku
+            $user->profile_photo = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
+
+        // Ažuriranje podataka korisnika
+        $user->name = $request->name;
+        $user->interests = $request->interests;
+        $user->bio = $request->bio;
+        $user->birthdate = $request->birthdate;
+
+        // Ažuriranje lozinke ako je postavljena nova
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user,
+        ]);
+    }
 }
