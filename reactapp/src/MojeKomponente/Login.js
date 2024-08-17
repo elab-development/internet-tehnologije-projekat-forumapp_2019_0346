@@ -3,10 +3,10 @@ import axios from 'axios';
 import './Register.css'; // Koristimo isti CSS kao za Register komponentu
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const Login = () => {
+const Login = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: 'jrunte@example.com',
+    password: 'password'
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +24,13 @@ const Login = () => {
           'Content-Type': 'application/json'
         }
       });
+
+      // Čuvanje tokena u sessionStorage
+      sessionStorage.setItem('auth_token', response.data.access_token);
+      
+      // Postavljanje korisnika kao ulogovanog
+      setIsLoggedIn(true);
+
       alert('Login successful');
   
     } catch (error) {
@@ -37,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="register-page"> {/* Isti CSS kao i za Register komponentu */}
+    <div className="register-page">  
       <div className="register-container">
         <h1 className="register-title">Login to Forum</h1>
         <form onSubmit={handleSubmit} className="register-form">
