@@ -60,10 +60,40 @@ const Register = () => {
     }
   };
 
+  const handleGenerateRandomUser = async () => {
+    try {
+      const response = await axios.get('https://api.api-ninjas.com/v1/randomuser', {
+        headers: { 'X-Api-Key': 'jcWCqSr114CjwUWVpd58L3vDj1sKV6bcdHWVk8pS' }
+      });
+      
+      const randomUser = response.data;
+      
+      setFormData({
+        name: randomUser.name,
+        email: randomUser.email,
+        password: '',
+        password_confirmation: '',
+        role_id: '',
+        interests: '', // Ako API vraća neke interese, možete ih ovde postaviti
+        profile_photo: null, // API ne vraća sliku, pa ostaje null
+        bio: '', // API ne vraća biografiju, pa ostaje prazno
+        birthdate: randomUser.birthday, // Postavljamo datum rođenja iz odgovora
+      });
+
+      alert('Random user data generated');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to generate random user data');
+    }
+  };
+
   return (
     <div className="register-page">
       <div className="register-container">
         <h1 className="register-title">Register for Forum</h1>
+        <button type="button" className="generate-button" onClick={handleGenerateRandomUser}>
+          Generate Random User
+        </button>
         <form onSubmit={handleSubmit} className="register-form">
           {step === 1 && (
             <>
