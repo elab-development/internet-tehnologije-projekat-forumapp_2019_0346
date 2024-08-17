@@ -27,12 +27,7 @@ Route::post('/login', [AuthController::class, 'login']);
  
 
 
-Route::apiResource('comments', CommentController::class);
-Route::apiResource('likes', LikeController::class);
 
-
-Route::apiResource('posts', PostController::class);
-Route::apiResource('topics', TopicController::class);
 Route::middleware('auth:sanctum')->group(function () {
  
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -43,8 +38,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/users', [UserController::class, 'index']);
     Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
-    Route::get('/users/statistics', [UserController::class, 'userStatistics']);
+   // Route::get('/users/statistics', [UserController::class, 'userStatistics']); //za seminarski
     Route::get('/users/search', [UserController::class, 'search']);
+
+
+
+    Route::apiResource('comments', CommentController::class);
+    Route::apiResource('likes', LikeController::class);
+
+
+    Route::apiResource('posts', PostController::class);
+    Route::apiResource('topics', TopicController::class);
 });
 
 

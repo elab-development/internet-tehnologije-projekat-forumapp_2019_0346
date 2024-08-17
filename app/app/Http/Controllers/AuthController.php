@@ -53,7 +53,7 @@ public function register(Request $request)
     
 
     return response()->json([
-        'message' => 'Registration successful. Please verify your email address.',
+        'message' => 'Registration successful.  ',
     ], 201);
 }
 

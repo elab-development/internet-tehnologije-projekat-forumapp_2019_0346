@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Topic;
 use App\Http\Resources\TopicResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TopicController extends Controller
@@ -26,14 +27,18 @@ class TopicController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $topic = Topic::create($request->all());
+        $topic = Topic::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => Auth::id(), // Koristimo ID ulogovanog korisnika
+        ]);
+
         return new TopicResource($topic);
     }
 
@@ -54,7 +59,6 @@ class TopicController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
@@ -62,7 +66,16 @@ class TopicController extends Controller
         }
 
         $topic = Topic::findOrFail($id);
-        $topic->update($request->all());
+
+        // Proveravamo da li je trenutni korisnik vlasnik teme
+        if ($topic->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $topic->update([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
 
         return new TopicResource($topic);
     }
@@ -73,6 +86,12 @@ class TopicController extends Controller
     public function destroy($id)
     {
         $topic = Topic::findOrFail($id);
+
+        // Proveravamo da li je trenutni korisnik vlasnik teme
+        if ($topic->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $topic->delete();
 
         return response()->json(['message' => 'Topic deleted successfully.']);
