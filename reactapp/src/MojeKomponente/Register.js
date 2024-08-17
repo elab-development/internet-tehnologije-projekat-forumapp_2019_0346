@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css';
-import { FaUser, FaEnvelope, FaLock, FaIdCard, FaBirthdayCake, FaCamera, FaClipboardList, FaPen } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaIdCard, FaBirthdayCake, FaCamera, FaClipboardList, FaPen } from 'react-icons/fa';
 
 import TextInput from './TextInput';
 import FileInput from './FileInput';
@@ -13,7 +13,7 @@ const Register = () => {
     email: '',
     password: '',
     password_confirmation: '',
-    role_id: '',
+    role_id: '1',  // Setovanje role_id na 1
     interests: '',
     profile_photo: null,
     bio: '',
@@ -21,6 +21,7 @@ const Register = () => {
   });
 
   const [step, setStep] = useState(1);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,11 +74,11 @@ const Register = () => {
         email: randomUser.email,
         password: '',
         password_confirmation: '',
-        role_id: '',
-        interests: '', // Ako API vraća neke interese, možete ih ovde postaviti
-        profile_photo: null, // API ne vraća sliku, pa ostaje null
-        bio: '', // API ne vraća biografiju, pa ostaje prazno
-        birthdate: randomUser.birthday, // Postavljamo datum rođenja iz odgovora
+        role_id: '1',
+        interests: '',
+        profile_photo: null,
+        bio: '',
+        birthdate: randomUser.birthday,
       });
 
       alert('Random user data generated');
@@ -87,13 +88,47 @@ const Register = () => {
     }
   };
 
+  const handleGenerateRandomPassword = async () => {
+    try {
+      const response = await axios.get('https://api.api-ninjas.com/v1/passwordgenerator', {
+        headers: { 'X-Api-Key': 'jcWCqSr114CjwUWVpd58L3vDj1sKV6bcdHWVk8pS' }
+      });
+
+      // Proveravamo šta tačno API vraća
+      console.log(response.data);
+
+      // Ovde očekujemo da je lozinka u `password` ključu, ali to može zavisiti od formata odgovora
+      const randomPassword = response.data.password || response.data.random_password || response.data; // Pokušaj da uhvatiš pravu vrednost
+
+      setFormData((prevData) => ({
+        ...prevData,
+        password: randomPassword,
+        password_confirmation: randomPassword
+      }));
+
+      alert('Random password generated');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to generate random password');
+    }
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="register-page">
       <div className="register-container">
         <h1 className="register-title">Register for Forum</h1>
-        <button type="button" className="generate-button" onClick={handleGenerateRandomUser}>
-          Generate Random User
-        </button>
+        <div className="button-group">
+          <button type="button" className="generate-button" onClick={handleGenerateRandomUser}>
+            Generate Random User
+          </button>
+          <button type="button" className="generate-button" onClick={handleGenerateRandomPassword}>
+            Generate Random Password
+          </button>
+        </div>
         <form onSubmit={handleSubmit} className="register-form">
           {step === 1 && (
             <>
@@ -114,22 +149,27 @@ const Register = () => {
                 type="email"
                 required
               />
-              <TextInput
-                icon={FaLock}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-                type="password"
-                required
-              />
+              <div className="input-container">
+                <FaLock className="register-icon" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                  required
+                />
+                <div className="password-toggle" onClick={toggleShowPassword}>
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </div>
+              </div>
               <TextInput
                 icon={FaLock}
                 name="password_confirmation"
                 value={formData.password_confirmation}
                 onChange={handleChange}
                 placeholder="Confirm Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
               />
               <button type="button" className="register-button" onClick={handleNextStep}>Next</button>
@@ -137,16 +177,7 @@ const Register = () => {
           )}
 
           {step === 2 && (
-            <>
-              <TextInput
-                icon={FaIdCard}
-                name="role_id"
-                value={formData.role_id}
-                onChange={handleChange}
-                placeholder="Role ID"
-                type="number"
-                required
-              />
+            <> 
               <TextInput
                 icon={FaClipboardList}
                 name="interests"
