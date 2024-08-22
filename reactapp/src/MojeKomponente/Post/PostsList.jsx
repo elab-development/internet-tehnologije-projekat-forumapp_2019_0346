@@ -8,13 +8,17 @@ const PostsList = () => {
   const { topics, loading: topicsLoading, error: topicsError } = useTopics();
   const [selectedTopic, setSelectedTopic] = useState('');
   const [selectedDateRange, setSelectedDateRange] = useState('always');
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5;  // Broj postova po strani
 
   const handleTopicChange = (event) => {
     setSelectedTopic(event.target.value);
+    setCurrentPage(1); // Resetuj na prvu stranu kada se promeni filter
   };
 
   const handleDateRangeChange = (event) => {
     setSelectedDateRange(event.target.value);
+    setCurrentPage(1); // Resetuj na prvu stranu kada se promeni filter
   };
 
   const getFilteredPosts = () => {
@@ -53,6 +57,13 @@ const PostsList = () => {
 
   const filteredPosts = getFilteredPosts();
 
+  // Logika za paginaciju
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   if (postsLoading || topicsLoading) return <p>Loading posts and topics...</p>;
   if (postsError) return <p>Error loading posts: {postsError}</p>;
   if (topicsError) return <p>Error loading topics: {topicsError}</p>;
@@ -84,11 +95,23 @@ const PostsList = () => {
       </div>
 
       <div className="posts-list">
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => <Post key={post.id} post={post} />)
+        {currentPosts.length > 0 ? (
+          currentPosts.map((post) => <Post key={post.id} post={post} />)
         ) : (
           <p>No posts available for this filter.</p>
         )}
+      </div>
+
+      <div className="pagination">
+        {[...Array(Math.ceil(filteredPosts.length / postsPerPage)).keys()].map(number => (
+          <button
+            key={number + 1}
+            onClick={() => paginate(number + 1)}
+            className={`page-item ${currentPage === number + 1 ? 'active' : ''}`}
+          >
+            {number + 1}
+          </button>
+        ))}
       </div>
     </div>
   );
