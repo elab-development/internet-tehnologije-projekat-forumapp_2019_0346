@@ -5,6 +5,7 @@ import './App.css';
 import Register from './MojeKomponente/Register';
 import Login from './MojeKomponente/Login';
 import Navbar from './MojeKomponente/Navbar'; // Importujte Navbar komponentu
+import PostsList from './MojeKomponente/Post/PostsList';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,7 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Pocetna />} />
           {isLoggedIn ? (
-            <Route path="/welcome" element={<div>Dobrodošli, korisniče! Ulogovani ste.</div>} />
+            <Route path="/posts" element={<PostsList></PostsList>} />
           ) : (
             <>
               <Route path="/register" element={<Register />} />

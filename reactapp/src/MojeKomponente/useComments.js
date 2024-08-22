@@ -16,7 +16,7 @@ const useComments = () => {
               'Authorization': `Bearer ${token}`
             }
           });
-          setComments(response.data);
+          setComments(response.data.data);
         } else {
           throw new Error('No token found');
         }

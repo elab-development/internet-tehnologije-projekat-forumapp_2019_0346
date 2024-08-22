@@ -16,7 +16,7 @@ const usePosts = () => {
               'Authorization': `Bearer ${token}`
             }
           });
-          setPosts(response.data);
+          setPosts(response.data.data);
         } else {
           throw new Error('No token found');
         }

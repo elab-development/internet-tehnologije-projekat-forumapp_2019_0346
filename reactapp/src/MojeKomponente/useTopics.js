@@ -16,7 +16,7 @@ const useTopics = () => {
               'Authorization': `Bearer ${token}`
             }
           });
-          setTopics(response.data);
+          setTopics(response.data.data);
         } else {
           throw new Error('No token found');
         }

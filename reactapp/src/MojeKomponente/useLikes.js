@@ -16,7 +16,7 @@ const useLikes = () => {
               'Authorization': `Bearer ${token}`
             }
           });
-          setLikes(response.data);
+          setLikes(response.data.data);
         } else {
           throw new Error('No token found');
         }
