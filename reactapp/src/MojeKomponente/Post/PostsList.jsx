@@ -9,6 +9,7 @@ const PostsList = () => {
   const [selectedTopic, setSelectedTopic] = useState('');
   const [selectedDateRange, setSelectedDateRange] = useState('always');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState('desc');  // Dodato stanje za sortiranje
   const postsPerPage = 5;  // Broj postova po strani
 
   const handleTopicChange = (event) => {
@@ -19,6 +20,11 @@ const PostsList = () => {
   const handleDateRangeChange = (event) => {
     setSelectedDateRange(event.target.value);
     setCurrentPage(1); // Resetuj na prvu stranu kada se promeni filter
+  };
+
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
+    setCurrentPage(1); // Resetuj na prvu stranu kada se promeni sortiranje
   };
 
   const getFilteredPosts = () => {
@@ -51,6 +57,13 @@ const PostsList = () => {
     if (dateLimit) {
       filtered = filtered.filter(post => new Date(post.created_at) >= dateLimit);
     }
+
+    // Sortiranje postova po datumu kreiranja
+    filtered = filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
 
     return filtered;
   };
@@ -90,6 +103,13 @@ const PostsList = () => {
             <option value="last7days">Last 7 Days</option>
             <option value="last30days">Last 30 Days</option>
             <option value="last3months">Last 3 Months</option>
+          </select>
+        </div>
+        <div className="filter-item">
+          <label htmlFor="sort-order-select">Sort by:</label>
+          <select id="sort-order-select" value={sortOrder} onChange={handleSortOrderChange}>
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
           </select>
         </div>
       </div>
