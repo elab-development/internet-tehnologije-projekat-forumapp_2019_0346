@@ -79,3 +79,72 @@
   color: #666;
   margin-top: 10px;
 }
+.posts-list-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Omogućava da se elementi prelamaju */
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  margin-bottom: 10px; /* Dodano za bolji raspored na manjim ekranima */
+}
+
+.filter-item label {
+  margin-bottom: 5px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.posts-list {
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-item {
+  margin: 0 5px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.page-item.active {
+  background-color: #f2602b;
+  color: white;
+  border-color: #f2602b;
+}
+
+.page-item:hover:not(.active) {
+  background-color: #f1f1f1;
+}

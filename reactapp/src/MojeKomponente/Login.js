@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css'; // Koristimo isti CSS kao za Register komponentu
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setIsLoggedIn }) => {
+  let navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: 'jrunte@example.com',
     password: 'password'
@@ -30,8 +32,8 @@ const Login = ({ setIsLoggedIn }) => {
       
       // Postavljanje korisnika kao ulogovanog
       setIsLoggedIn(true);
-
-      alert('Login successful');
+      navigate("/posts");
+     // alert('Login successful');
   
     } catch (error) {
       console.error(error);

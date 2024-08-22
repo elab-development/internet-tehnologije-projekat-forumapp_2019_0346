@@ -9,29 +9,35 @@ const PostsList = () => {
   const [selectedTopic, setSelectedTopic] = useState('');
   const [selectedDateRange, setSelectedDateRange] = useState('always');
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState('desc');  // Dodato stanje za sortiranje
-  const postsPerPage = 5;  // Broj postova po strani
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const postsPerPage = 5;
 
   const handleTopicChange = (event) => {
     setSelectedTopic(event.target.value);
-    setCurrentPage(1); // Resetuj na prvu stranu kada se promeni filter
+    setCurrentPage(1);
   };
 
   const handleDateRangeChange = (event) => {
     setSelectedDateRange(event.target.value);
-    setCurrentPage(1); // Resetuj na prvu stranu kada se promeni filter
+    setCurrentPage(1);
   };
 
   const handleSortOrderChange = (event) => {
     setSortOrder(event.target.value);
-    setCurrentPage(1); // Resetuj na prvu stranu kada se promeni sortiranje
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+    setCurrentPage(1);
   };
 
   const getFilteredPosts = () => {
     let filtered = posts;
 
     if (selectedTopic) {
-      filtered = filtered.filter(post => post.topic.id === parseInt(selectedTopic));
+      filtered = filtered.filter(post => post.topic?.id === parseInt(selectedTopic));
     }
 
     const now = new Date();
@@ -56,6 +62,16 @@ const PostsList = () => {
 
     if (dateLimit) {
       filtered = filtered.filter(post => new Date(post.created_at) >= dateLimit);
+    }
+
+    // Filtriranje po pretrazi
+    if (searchTerm) {
+      filtered = filtered.filter(post =>
+        (post.content && post.content.toLowerCase().includes(searchTerm)) ||
+        (post.topic?.name && post.topic.name.toLowerCase().includes(searchTerm)) ||
+        (post.user?.name && post.user.name.toLowerCase().includes(searchTerm)) ||
+        (post.other && post.other.toLowerCase().includes(searchTerm))
+      );
     }
 
     // Sortiranje postova po datumu kreiranja
@@ -111,6 +127,16 @@ const PostsList = () => {
             <option value="desc">Newest First</option>
             <option value="asc">Oldest First</option>
           </select>
+        </div>
+        <div className="filter-item">
+          <label htmlFor="search-input">Search:</label>
+          <input
+            id="search-input"
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search posts..."
+          />
         </div>
       </div>
 
