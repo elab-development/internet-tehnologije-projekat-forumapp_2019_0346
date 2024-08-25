@@ -226,3 +226,69 @@
   font-size: 0.9rem;
   margin-top: 10px;
 }
+.post-details {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-details h2 {
+  color: #f2602b;
+}
+
+.post-details p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.post-images img {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.comments-section h3 {
+  margin-top: 40px;
+  color: #f2602b;
+}
+
+.comments-section ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.comments-section li {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.comments-section textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.comments-section button {
+  padding: 10px 20px;
+  background-color: #f2602b;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comments-section button:hover {
+  background-color: #d9534f;
+}

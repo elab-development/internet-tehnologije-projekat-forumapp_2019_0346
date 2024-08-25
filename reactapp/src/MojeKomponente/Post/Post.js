@@ -1,19 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Post = ({ post }) => {
+  const navigate = useNavigate();
+
   const handleImageClick = (imageUrl) => {
     const imgWindow = window.open(imageUrl, '_blank');
     imgWindow.focus();
   };
 
   const getFullImageUrl = (image) => {
-    // Check if the image path starts with 'http', 'https', or a similar protocol
     if (image.startsWith('http://') || image.startsWith('https://')) {
-      return image;  // Use the URL as is
+      return image;
     } else {
-      // Otherwise, prepend the base URL
       return `http://127.0.0.1:8000/${image}`;
     }
+  };
+
+  const handleDetailsClick = () => {
+    navigate(`/post/${post.id}`);
   };
 
   return (
@@ -29,7 +34,7 @@ const Post = ({ post }) => {
           {JSON.parse(post.images).map((image, index) => (
             <img 
               key={index} 
-              src={getFullImageUrl(image)}  // Use the helper function to determine the full URL
+              src={getFullImageUrl(image)}  
               alt={`Post image ${index + 1}`} 
               onClick={() => handleImageClick(getFullImageUrl(image))} 
             />
@@ -37,6 +42,10 @@ const Post = ({ post }) => {
         </div>
       )}
       {post.other && <p className="post-other">Other info: {post.other}</p>}
+      
+      <button onClick={handleDetailsClick} className="details-button">
+        Details
+      </button>
     </div>
   );
 };
