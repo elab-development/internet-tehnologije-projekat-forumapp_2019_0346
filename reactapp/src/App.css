@@ -148,3 +148,81 @@
 .page-item:hover:not(.active) {
   background-color: #f1f1f1;
 }
+.create-post-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
+
+.create-post-container h3 {
+  font-size: 1.5rem;
+  color: #f2602b;
+  margin-bottom: 20px;
+}
+
+.create-post-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-post-container form > div {
+  margin-bottom: 15px;
+}
+
+.create-post-container label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.create-post-container input[type="text"],
+.create-post-container select,
+.create-post-container textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 100%;
+}
+
+.create-post-container input[type="file"] {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 100%;
+}
+
+.create-post-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.create-post-container button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #f2602b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.create-post-container button[type="submit"]:hover {
+  background-color: #d95225;
+}
+
+.create-post-container .error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
