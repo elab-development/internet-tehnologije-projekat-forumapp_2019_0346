@@ -8,9 +8,11 @@ const PostDetails = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [editingComment, setEditingComment] = useState(null);
+  const [likes, setLikes] = useState(0); // State for likes count
+  const [userLiked, setUserLiked] = useState(false); // State to track if the user has liked the post
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const userId = sessionStorage.getItem('user_id'); // Assuming user_id is stored in session
+  const userId = sessionStorage.getItem('user_id'); 
 
   useEffect(() => {
     const fetchPostDetails = async () => {
@@ -30,6 +32,17 @@ const PostDetails = () => {
         });
         setComments(commentsResponse.data.data);
 
+        const likesResponse = await axios.get(`http://127.0.0.1:8000/api/likes?post_id=${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the headers
+          },
+        });
+        setLikes(likesResponse.data.data.length);
+
+        // Check if the logged-in user has already liked the post
+        const userLikedPost = likesResponse.data.data.some(like => like.user_id === parseInt(userId));
+        setUserLiked(userLikedPost);
+
       } catch (err) {
         setError('Failed to load post details.');
         console.error(err);
@@ -39,7 +52,7 @@ const PostDetails = () => {
     };
 
     fetchPostDetails();
-  }, [id]);
+  }, [id, userId]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -122,6 +135,47 @@ const PostDetails = () => {
     }
   };
 
+  const handleLikeToggle = async () => {
+    const token = sessionStorage.getItem('auth_token'); // Get the token from session storage
+
+    try {
+      if (userLiked) {
+        // User has already liked the post, so unlike it
+        const like = await axios.get(`http://127.0.0.1:8000/api/likes?post_id=${id}&user_id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (like.data.data.length > 0) {
+          await axios.delete(`http://127.0.0.1:8000/api/likes/${like.data.data[0].id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setLikes(likes - 1);
+          setUserLiked(false);
+        }
+
+      } else {
+        // User has not liked the post, so like it
+        await axios.post('http://127.0.0.1:8000/api/likes', 
+          { post_id: id }, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setLikes(likes + 1);
+        setUserLiked(true);
+      }
+    } catch (err) {
+      setError('Failed to toggle like.');
+      console.error(err);
+    }
+  };
+
   if (loading) return <p>Loading post details...</p>;
   if (error) return <p>{error}</p>;
 
@@ -143,6 +197,11 @@ const PostDetails = () => {
             </div>
           )}
           {post.other && <p>Other info: {post.other}</p>}
+          <div className="likes-section">
+            <button onClick={handleLikeToggle}>
+              {userLiked ? 'Unlike' : 'Like'} ({likes})
+            </button>
+          </div>
         </>
       )}
 
