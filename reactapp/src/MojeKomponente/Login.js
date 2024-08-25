@@ -29,6 +29,7 @@ const Login = ({ setIsLoggedIn }) => {
 
       // Čuvanje tokena u sessionStorage
       sessionStorage.setItem('auth_token', response.data.access_token);
+      sessionStorage.setItem('user_id', response.data.user_id);
       
       // Postavljanje korisnika kao ulogovanog
       setIsLoggedIn(true);
