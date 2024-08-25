@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import Post from './Post';  
 import usePosts from '../usePosts';
 import useTopics from '../useTopics';
+import axios from 'axios';
 
 const PostsList = () => {
-  const { posts, loading: postsLoading, error: postsError } = usePosts();
+  const { posts, loading: postsLoading, error: postsError, setPosts } = usePosts();
   const { topics, loading: topicsLoading, error: topicsError } = useTopics();
   const [selectedTopic, setSelectedTopic] = useState('');
   const [selectedDateRange, setSelectedDateRange] = useState('always');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState('desc');
   const [searchTerm, setSearchTerm] = useState('');
+  const [newPostContent, setNewPostContent] = useState('');
+  const [newPostTopic, setNewPostTopic] = useState('');
+  const [newPostOther, setNewPostOther] = useState('');
+  const [newPostImages, setNewPostImages] = useState(null); // New state for images
+  const [error, setError] = useState(null);
   const postsPerPage = 5;
 
   const handleTopicChange = (event) => {
@@ -31,6 +37,10 @@ const PostsList = () => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
     setCurrentPage(1);
+  };
+
+  const handleImagesChange = (event) => {
+    setNewPostImages(event.target.files);
   };
 
   const getFilteredPosts = () => {
@@ -64,7 +74,6 @@ const PostsList = () => {
       filtered = filtered.filter(post => new Date(post.created_at) >= dateLimit);
     }
 
-    // Filtriranje po pretrazi
     if (searchTerm) {
       filtered = filtered.filter(post =>
         (post.content && post.content.toLowerCase().includes(searchTerm)) ||
@@ -74,7 +83,6 @@ const PostsList = () => {
       );
     }
 
-    // Sortiranje postova po datumu kreiranja
     filtered = filtered.sort((a, b) => {
       const dateA = new Date(a.created_at);
       const dateB = new Date(b.created_at);
@@ -86,12 +94,49 @@ const PostsList = () => {
 
   const filteredPosts = getFilteredPosts();
 
-  // Logika za paginaciju
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleCreatePost = async (e) => {
+    e.preventDefault();
+    const token = sessionStorage.getItem('auth_token');
+
+    const formData = new FormData();
+    formData.append('content', newPostContent);
+    formData.append('topic_id', newPostTopic);
+    formData.append('other', newPostOther);
+
+    if (newPostImages) {
+      for (let i = 0; i < newPostImages.length; i++) {
+        formData.append('images[]', newPostImages[i]);
+      }
+    }
+
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/posts',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      setPosts([response.data.data, ...posts]);  
+      setNewPostContent('');
+      setNewPostTopic('');
+      setNewPostOther('');
+      setNewPostImages(null); 
+    } catch (err) {
+      setError('Failed to create post.');
+      console.error(err);
+    }
+  };
 
   if (postsLoading || topicsLoading) return <p>Loading posts and topics...</p>;
   if (postsError) return <p>Error loading posts: {postsError}</p>;
@@ -158,6 +203,58 @@ const PostsList = () => {
             {number + 1}
           </button>
         ))}
+      </div>
+
+      <div className="create-post-container">
+        <h3>Create a New Post</h3>
+        <form onSubmit={handleCreatePost} encType="multipart/form-data">
+          <div>
+            <label htmlFor="new-post-topic">Select Topic:</label>
+            <select
+              id="new-post-topic"
+              value={newPostTopic}
+              onChange={(e) => setNewPostTopic(e.target.value)}
+              required
+            >
+              <option value="">Choose a topic</option>
+              {topics.map((topic) => (
+                <option key={topic.id} value={topic.id}>
+                  {topic.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="new-post-content">Post Content:</label>
+            <textarea
+              id="new-post-content"
+              value={newPostContent}
+              onChange={(e) => setNewPostContent(e.target.value)}
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label htmlFor="new-post-other">Other Information:</label>
+            <input
+              type="text"
+              id="new-post-other"
+              value={newPostOther}
+              onChange={(e) => setNewPostOther(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="new-post-images">Upload Images:</label>
+            <input
+              type="file"
+              id="new-post-images"
+              onChange={handleImagesChange}
+              multiple
+              accept="image/*"
+            />
+          </div>
+          <button type="submit">Submit Post</button>
+        </form>
+        {error && <p className="error">{error}</p>}
       </div>
     </div>
   );

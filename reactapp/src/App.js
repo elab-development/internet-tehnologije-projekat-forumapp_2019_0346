@@ -20,7 +20,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /> {/* Dodajte Navbar komponentu */}
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /> 
       <div className="App">
         <Routes>
           <Route path="/" element={<Pocetna />} />

@@ -6,8 +6,11 @@ import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaIdCard, FaBirthdayCake
 import TextInput from './TextInput';
 import FileInput from './FileInput';
 import TextareaInput from './TextareaInput';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  let navigate= useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -55,6 +58,7 @@ const Register = () => {
         }
       });
       alert('Registration successful');
+      navigate("/login")
     } catch (error) {
       console.error(error);
       alert('An error occurred during registration');

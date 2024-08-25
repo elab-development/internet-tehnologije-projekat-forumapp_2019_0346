@@ -6,6 +6,16 @@ const Post = ({ post }) => {
     imgWindow.focus();
   };
 
+  const getFullImageUrl = (image) => {
+    // Check if the image path starts with 'http', 'https', or a similar protocol
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image;  // Use the URL as is
+    } else {
+      // Otherwise, prepend the base URL
+      return `http://127.0.0.1:8000/${image}`;
+    }
+  };
+
   return (
     <div className="post">
       <div className="post-header">
@@ -19,9 +29,9 @@ const Post = ({ post }) => {
           {JSON.parse(post.images).map((image, index) => (
             <img 
               key={index} 
-              src={image} 
+              src={getFullImageUrl(image)}  // Use the helper function to determine the full URL
               alt={`Post image ${index + 1}`} 
-              onClick={() => handleImageClick(image)} 
+              onClick={() => handleImageClick(getFullImageUrl(image))} 
             />
           ))}
         </div>

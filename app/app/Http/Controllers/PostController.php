@@ -27,24 +27,35 @@ class PostController extends Controller
         $validator = Validator::make($request->all(), [
             'content' => 'required|string',
             'topic_id' => 'required|exists:topics,id',
-            'images' => 'nullable|json',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate each file in the array
             'other' => 'nullable|string',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
+    
+        $imagePaths = [];
+        if ($request->has('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('images', 'public');  // This will store in storage/app/public/images
+                 $imagePaths[] = 'storage/' . $path;  // Ensure the correct relative path is stored
+            }
+            
+        }
+    
         $post = Post::create([
             'content' => $request->content,
-            'user_id' => Auth::id(), // Koristi ID ulogovanog korisnika
+            'user_id' => Auth::id(),
             'topic_id' => $request->topic_id,
-            'images' => $request->images,
+            'images' => json_encode($imagePaths), // Store paths as JSON string
             'other' => $request->other,
         ]);
-
+    
         return new PostResource($post);
     }
+    
 
     /**
      * Display the specified post.
