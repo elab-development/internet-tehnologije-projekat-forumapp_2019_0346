@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Topic;
 use App\Http\Resources\TopicResource;
+use App\Models\Comment;
+use App\Models\Like;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TopicController extends Controller
@@ -87,13 +91,25 @@ class TopicController extends Controller
     {
         $topic = Topic::findOrFail($id);
 
-        // Proveravamo da li je trenutni korisnik vlasnik teme
-        if ($topic->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        DB::transaction(function () use ($topic) {
+            // Prvo obrišemo sve postove povezane sa ovim topic-om
+            $posts = Post::where('topic_id', $topic->id)->get();
 
-        $topic->delete();
+            foreach ($posts as $post) {
+                // Brisemo sve komentare povezane sa postom
+                Comment::where('post_id', $post->id)->delete();
 
-        return response()->json(['message' => 'Topic deleted successfully.']);
+                // Brisemo sve lajkove povezane sa postom
+                Like::where('post_id', $post->id)->delete();
+
+                // Na kraju brisemo post
+                $post->delete();
+            }
+
+            // Na kraju obrišemo i sam topic
+            $topic->delete();
+        });
+
+        return response()->json(['message' => 'Topic and related posts, comments, and likes deleted successfully.']);
     }
 }
