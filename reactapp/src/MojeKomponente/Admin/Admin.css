@@ -1,0 +1,67 @@
+.admin-panel {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-panel h1 {
+    font-size: 2rem;
+    color: #f2602b;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .admin-table th {
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .admin-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .admin-table td {
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  .admin-table select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  .admin-table button {
+    padding: 8px 12px;
+    background-color: #f2602b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-table button:hover {
+    background-color: #d9534f;
+  }
+  
