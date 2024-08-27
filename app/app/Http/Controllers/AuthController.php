@@ -86,6 +86,7 @@ public function register(Request $request)
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user_id'=>$user->id,
+            'user'=>$user,
         ]);
     }
 

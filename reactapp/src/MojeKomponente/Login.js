@@ -33,7 +33,14 @@ const Login = ({ setIsLoggedIn }) => {
       
       // Postavljanje korisnika kao ulogovanog
       setIsLoggedIn(true);
-      navigate("/posts");
+      if(response.data.user.role_id==1){ //obican korisnik
+        navigate("/posts");
+      }else if(response.data.user.role_id==2){
+        navigate("/moderator");
+      }else if(response.data.user.role_id==3){
+        navigate("/admin");
+      }
+     
      // alert('Login successful');
   
     } catch (error) {

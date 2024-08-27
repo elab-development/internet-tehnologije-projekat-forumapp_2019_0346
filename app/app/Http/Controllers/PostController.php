@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Http\Resources\PostResource;
+use App\Models\Comment;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -100,8 +103,18 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        $post->delete();
 
-        return response()->json(['message' => 'Post deleted successfully.']);
+        DB::transaction(function () use ($post) {
+            // Prvo brisemo sve komentare povezane sa ovim postom
+            Comment::where('post_id', $post->id)->delete();
+
+            // Zatim brisemo sve lajkove povezane sa ovim postom
+            Like::where('post_id', $post->id)->delete();
+
+            // Na kraju brisemo i sam post
+            $post->delete();
+        });
+
+        return response()->json(['message' => 'Post and related comments and likes deleted successfully.']);
     }
 }

@@ -7,6 +7,7 @@ import Login from './MojeKomponente/Login';
 import Navbar from './MojeKomponente/Navbar'; // Importujte Navbar komponentu
 import PostsList from './MojeKomponente/Post/PostsList';
 import PostDetails from './MojeKomponente/Post/PostDetails';
+import Moderator from './MojeKomponente/Moderator/Moderator';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,6 +31,7 @@ function App() {
             
             <Route path="/post/:id" element={<PostDetails></PostDetails>} />
             <Route path="/posts" element={<PostsList></PostsList>} />
+            <Route path="/moderator" element={<Moderator></Moderator>} />
             
             </>
             
