@@ -9,6 +9,7 @@ import PostsList from './MojeKomponente/Post/PostsList';
 import PostDetails from './MojeKomponente/Post/PostDetails';
 import Moderator from './MojeKomponente/Moderator/Moderator';
 import Admin from './MojeKomponente/Admin/Admin';
+import AdminStatistike from './MojeKomponente/Admin/AdminStatistike';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,6 +35,8 @@ function App() {
             <Route path="/posts" element={<PostsList></PostsList>} />
             <Route path="/moderator" element={<Moderator></Moderator>} />
             <Route path="/admin" element={<Admin></Admin>} />
+            <Route path="/adminStatistike" element={<AdminStatistike></AdminStatistike>} />
+
             </>
             
           ) : (
