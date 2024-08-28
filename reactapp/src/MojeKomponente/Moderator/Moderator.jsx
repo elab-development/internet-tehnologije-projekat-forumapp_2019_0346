@@ -58,7 +58,7 @@ const Moderator = () => {
           <tr>
             <th>ID</th>
             <th>Content</th>
-            <th>Topic ID</th>
+           
             <th>Actions</th>
           </tr>
         </thead>
@@ -67,7 +67,7 @@ const Moderator = () => {
             <tr key={post.id}>
               <td>{post.id}</td>
               <td>{post.content}</td>
-              <td>{post.topic_id}</td>
+             
               <td>
                 <button onClick={() => handleDeletePost(post.id)}>Delete</button>
               </td>
