@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import usePosts from '../usePosts';
-import useTopics from '../useTopics';  // Uvezi useTopics hook
-import './Moderator.css';  // Uvezi CSS stilove
+import useTopics from '../useTopics';
+import './Moderator.css';
 
 const Moderator = () => {
   const { posts, setPosts, loading: loadingPosts, error: errorPosts } = usePosts();
   const { topics, setTopics, loading: loadingTopics, error: errorTopics } = useTopics();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newTopicTitle, setNewTopicTitle] = useState('');
+  const [newTopicDescription, setNewTopicDescription] = useState('');
 
   const handleDeletePost = async (id) => {
     try {
@@ -44,6 +48,34 @@ const Moderator = () => {
     }
   };
 
+  const handleCreateTopic = async () => {
+    try {
+      const token = sessionStorage.getItem('auth_token');
+      if (token) {
+        const response = await axios.post(
+          'http://127.0.0.1:8000/api/topics',
+          {
+            title: newTopicTitle,
+            description: newTopicDescription,
+          },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        setTopics([...topics, response.data.data]); // Dodaj novu temu u listu
+        setIsModalOpen(false); // Zatvori modal
+        setNewTopicTitle(''); // Resetuj polja
+        setNewTopicDescription('');
+      } else {
+        throw new Error('No token found');
+      }
+    } catch (err) {
+      console.error('Error creating topic:', err);
+    }
+  };
+
   if (loadingPosts || loadingTopics) return <p>Loading...</p>;
   if (errorPosts || errorTopics) return <p>Error: {errorPosts || errorTopics}</p>;
 
@@ -58,7 +90,6 @@ const Moderator = () => {
           <tr>
             <th>ID</th>
             <th>Content</th>
-           
             <th>Actions</th>
           </tr>
         </thead>
@@ -67,7 +98,6 @@ const Moderator = () => {
             <tr key={post.id}>
               <td>{post.id}</td>
               <td>{post.content}</td>
-             
               <td>
                 <button onClick={() => handleDeletePost(post.id)}>Delete</button>
               </td>
@@ -76,8 +106,9 @@ const Moderator = () => {
         </tbody>
       </table>
 
-      
+      {/* Tabela za teme */}
       <h2>Topics</h2>
+      <button onClick={() => setIsModalOpen(true)}>Create New Topic</button>
       <table className="moderator-table">
         <thead>
           <tr>
@@ -100,6 +131,32 @@ const Moderator = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Modal za kreiranje nove teme */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Create New Topic</h2>
+            <label>
+              Title:
+              <input
+                type="text"
+                value={newTopicTitle}
+                onChange={(e) => setNewTopicTitle(e.target.value)}
+              />
+            </label>
+            <label>
+              Description:
+              <textarea
+                value={newTopicDescription}
+                onChange={(e) => setNewTopicDescription(e.target.value)}
+              />
+            </label>
+            <button onClick={handleCreateTopic}>Create</button>
+            <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
