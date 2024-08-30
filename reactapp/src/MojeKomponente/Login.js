@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Register.css'; // Koristimo isti CSS kao za Register komponentu
+import './Register.css';  
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,29 +26,30 @@ const Login = ({ setIsLoggedIn }) => {
           'Content-Type': 'application/json'
         }
       });
-
-      // Čuvanje tokena u sessionStorage
+  
+      // Čuvanje tokena i uloge u sessionStorage
       sessionStorage.setItem('auth_token', response.data.access_token);
       sessionStorage.setItem('user_id', response.data.user_id);
-      
+      sessionStorage.setItem('role_id', response.data.user.role_id);
+ 
       // Postavljanje korisnika kao ulogovanog
       setIsLoggedIn(true);
-      if(response.data.user.role_id==1){ //obican korisnik
+  
+      // Preusmeravanje na osnovu uloge korisnika
+      if(response.data.user.role_id == 1) {
         navigate("/posts");
-      }else if(response.data.user.role_id==2){
+      } else if(response.data.user.role_id == 2) {
         navigate("/moderator");
-      }else if(response.data.user.role_id==3){
+      } else if(response.data.user.role_id == 3) {
         navigate("/admin");
       }
-     
-     // alert('Login successful');
-  
+    
     } catch (error) {
       console.error(error);
       alert('Login failed. Please check your credentials.');
     }
   };
-
+  
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
