@@ -1,0 +1,105 @@
+.register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('https://images.inc.com/uploaded_files/image/1920x1080/getty_541975802_243006.jpg'); /* Pozadinska slika */
+    background-size: cover;
+    background-position: center;
+}
+
+.register-container {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Bela pozadina sa malo transparentnosti */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-title {
+    background-color: rgba(255, 255, 255, 0.8); /* Bela pozadina za naslov */
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 2rem;
+    color: #333;
+    border-radius: 10px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.register-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #f2602b;
+}
+
+.register-form input,
+.register-form textarea {
+    padding: 10px 10px 10px 40px; /* Ostavlja prostor za ikonicu */
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #f2602b;
+    cursor: pointer;
+}
+
+.register-button {
+    background-color: #f2602b;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.register-button:hover {
+    background-color: #d45223;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.generate-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.generate-button:hover {
+    background-color: #0056b3;
+}

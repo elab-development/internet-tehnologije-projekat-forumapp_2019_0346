@@ -1,0 +1,294 @@
+/* Stilovi za listu postova */
+.posts-list {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Stilovi za pojedinačni post */
+.post {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Post header - user and date */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.post-user {
+  font-size: 0.9rem;
+  color: #f2602b; /* Ista boja kao u headeru */
+  font-weight: bold;
+}
+
+.post-created-at {
+  font-size: 0.8rem;
+  color: #999;
+  text-align: right;
+}
+
+/* Topic title */
+.post-topic {
+  font-size: 1.5rem;
+  color: #f2602b; /* Ista boja kao u headeru */
+  margin-bottom: 10px;
+}
+
+/* Content of the post */
+.post-content {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Post images */
+.post-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.post-images img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.post-images img:hover {
+  transform: scale(1.1);
+}
+
+/* Other info */
+.post-other {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 10px;
+}
+.posts-list-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Omogućava da se elementi prelamaju */
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  margin-bottom: 10px; /* Dodano za bolji raspored na manjim ekranima */
+}
+
+.filter-item label {
+  margin-bottom: 5px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.posts-list {
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-item {
+  margin: 0 5px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.page-item.active {
+  background-color: #f2602b;
+  color: white;
+  border-color: #f2602b;
+}
+
+.page-item:hover:not(.active) {
+  background-color: #f1f1f1;
+}
+.create-post-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
+
+.create-post-container h3 {
+  font-size: 1.5rem;
+  color: #f2602b;
+  margin-bottom: 20px;
+}
+
+.create-post-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-post-container form > div {
+  margin-bottom: 15px;
+}
+
+.create-post-container label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.create-post-container input[type="text"],
+.create-post-container select,
+.create-post-container textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 100%;
+}
+
+.create-post-container input[type="file"] {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 100%;
+}
+
+.create-post-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.create-post-container button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #f2602b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.create-post-container button[type="submit"]:hover {
+  background-color: #d95225;
+}
+
+.create-post-container .error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+.post-details {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-details h2 {
+  color: #f2602b;
+}
+
+.post-details p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.post-images img {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.comments-section h3 {
+  margin-top: 40px;
+  color: #f2602b;
+}
+
+.comments-section ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.comments-section li {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.comments-section textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.comments-section button {
+  padding: 10px 20px;
+  background-color: #f2602b;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comments-section button:hover {
+  background-color: #d9534f;
+}
